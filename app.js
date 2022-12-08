@@ -1,6 +1,5 @@
 import express from "express";
-import oste from "./routes/oste.js";
-// import hej from "./routes/hej.js";
+import cheeses from "./routes/cheeses/index.js";
 
 const app = express();
 
@@ -10,7 +9,7 @@ app.use(express.static("./public"));
 
 // hej(app);
 
-oste(app);
+cheeses(app);
 
 app.get("/stewart", function (req, res) {
   res.send(
@@ -23,3 +22,4 @@ app.get("/stewart", function (req, res) {
 app.listen(port, function () {
   console.log("Server started on port " + port);
 });
+//mongodb+srv://dbadmin:<password>@cluster0.lac5bg8.mongodb.net/test
