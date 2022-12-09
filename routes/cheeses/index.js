@@ -6,7 +6,7 @@ import upload from "../../middlewares/upload.js";
 
 export default function cheeses(app) {
   app
-    .route("/cheeses/:id?")
+    .route("/api/v1/cheeses/:id?")
     .delete(deleteCheese)
     .get(getAllCheeses)
     .all(authorization)
