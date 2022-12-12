@@ -1,15 +1,19 @@
 import express from "express";
 import cheeses from "./routes/cheeses/index.js";
+import users from "./routes/users/index.js";
 
 const app = express();
 
 var port = 3000;
 
 app.use(express.static("./public"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // hej(app);
 
 cheeses(app);
+users(app);
 
 app.get("/stewart", function (req, res) {
   res.send(
