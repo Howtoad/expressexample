@@ -1,8 +1,24 @@
-import useDB from "../../database.js";
+import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+
 dotenv.config();
+
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+});
+
+const User = mongoose.model("User", userSchema);
+
 export default async function token(req, res) {
   if (!req.body.username || !req.body.password) {
     res.status(400);
@@ -10,10 +26,9 @@ export default async function token(req, res) {
     return;
   }
 
-  const { collection, client } = await useDB("users");
   try {
-    const user = await collection.findOne({ username: req.body.username });
-    client.close();
+    const user = await User.findOne({ username: req.body.username });
+
     if (!user) {
       res.status(403);
       res.end();
@@ -25,6 +40,7 @@ export default async function token(req, res) {
       res.end();
       return;
     }
+
     const newToken = jwt.sign(
       { username: user.username },
       process.env.TOKEN_SECRET,
