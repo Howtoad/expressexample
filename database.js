@@ -1,15 +1,13 @@
-import { MongoClient } from "mongodb";
+// import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
 const dbUrl = process.env.MONGO_URI;
-const client = new MongoClient(dbUrl);
 
-async function useDB(collectionName) {
-  await client.connect();
-  console.log("Connection achieved");
-  const db = client.db("Cheeseshop");
-  const collection = db.collection(collectionName);
-  return { collection, client };
+async function main() {
+  await mongoose.connect(dbUrl);
+
+  console.log("Connected to database");
 }
-export default useDB;
+main().catch((error) => console.log("db connection failed", error));

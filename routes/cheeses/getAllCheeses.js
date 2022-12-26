@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import useDB from "../../database.js";
+import Cheese from "../../models/cheeseModel.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -8,16 +8,13 @@ function URLBuilder(id, resource) {
 }
 
 export default async function getAllCheeses(req, res) {
-  const { collection, client } = await useDB("cheeses");
-
   const id = req.params.id;
   const limit = parseInt(req.query.limit || 20);
   const skip = parseInt(req.query.skip || 0);
 
   const query = id ? { _id: ObjectId(id) } : {};
-  const result = await collection.find(query).limit(limit).skip(skip).toArray();
-  const length = await collection.countDocuments();
-  client.close();
+  const result = await Cheese.find(query).limit(limit).skip(skip);
+  const length = await Cheese.countDocuments();
 
   const nextLink =
     skip + limit >= length
