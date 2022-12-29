@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import useDB from "../../database.js";
+import user from "../../models/userModel.js";
 
 export default async function createUser(req, res) {
   if (!req.body.username || !req.body.password) {
@@ -7,8 +7,8 @@ export default async function createUser(req, res) {
     res.end();
     return;
   }
-  const { collection, client } = await useDB("users");
-  const check = await collection.findOne({ username: req.body.username });
+
+  const check = await user.findOne({ username: req.body.username });
   if (check) {
     res.status(403);
     res.end();
@@ -18,23 +18,20 @@ export default async function createUser(req, res) {
   const saltRounds = 4;
   const hash = await bcrypt.hash(req.body.password, saltRounds);
   try {
-    const result = await collection.findOneAndUpdate(
-      { createdAt: Date.now() },
-      {
-        $set: {
-          username: req.body.username,
-          password: hash,
-        },
-      },
-      {
-        upsert: true,
-        returnDocument: "after",
-      }
-    );
+    const user = new user({
+      username: req.body.username,
+      password: hash,
+    });
+    await user.save();
     res.status(201);
-    res.json(result);
+    res.json(user);
     res.end();
   } catch (error) {
+    if (error._message) {
+      res.status(400);
+      res.end();
+      return;
+    }
     console.log("create user error:", error);
     res.status(500);
     res.end();

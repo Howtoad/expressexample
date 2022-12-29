@@ -2,7 +2,7 @@ import getAllCheeses from "./getAllCheeses.js";
 import createCheese from "./createCheese.js";
 import upload from "../../middlewares/upload.js";
 // import deleteCheese from "./deleteCheese.js";
-// import updateCheese from "./updateCheese.js";
+import updateCheese from "./updateCheese.js";
 // import authorization from "../../middlewares/auth.js";
 
 export default function cheeses(app) {
@@ -11,6 +11,6 @@ export default function cheeses(app) {
     .get(getAllCheeses)
     // .delete(deleteCheese)
     // .all(authorization)
-    .post(upload.single("image"), createCheese);
-  // .patch(upload.single("image"), updateCheese);
+    .post(upload.single("image"), createCheese)
+    .patch(upload.single("image"), updateCheese);
 }

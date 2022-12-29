@@ -1,7 +1,7 @@
 import express from "express";
 import cheeses from "./routes/cheeses/index.js";
-// import users from "./routes/users/index.js";
-// import auth from "./routes/auth/index.js";
+import users from "./routes/users/index.js";
+import auth from "./routes/auth/index.js";
 import "./database.js";
 
 const app = express();
@@ -15,8 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 // hej(app);
 
 cheeses(app);
-// users(app);
-// auth(app);
+users(app);
+auth(app);
 
 app.get("/stewart", function (req, res) {
   res.send(
